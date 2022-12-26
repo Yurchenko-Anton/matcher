@@ -14,13 +14,13 @@
             <column name="id" type="int">
                 <constraints nullable="false" primaryKey="true"/>
             </column>
-            <column name="street_name" type="int">
+            <column name="street_name" type="varchar(255)">
                 <constraints nullable="false" unique="true"/>
             </column>
             <column name="x_coordinate" type="int">
                 <constraints nullable="false"/>
             </column>
-            <column name="y_coordinate" type="varchar(255)">
+            <column name="y_coordinate" type="int">
                 <constraints nullable="false"/>
             </column>
         </createTable>

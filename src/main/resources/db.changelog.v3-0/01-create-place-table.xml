@@ -10,7 +10,7 @@
 
     <changeSet id="4" author="Yuar">
 
-        <createTable tableName="order">
+        <createTable tableName="places">
             <column name="id" type="int">
                 <constraints nullable="false" primaryKey="true"/>
             </column>

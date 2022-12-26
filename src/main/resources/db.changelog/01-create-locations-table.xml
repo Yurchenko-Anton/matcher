@@ -7,7 +7,7 @@
 
     <changeSet id="4" author="ayurchenko">
 
-        <createTable tableName="places">
+        <createTable tableName="locations">
             <column name="id" type="int">
                 <constraints nullable="false" primaryKey="true"/>
             </column>
@@ -22,7 +22,7 @@
             </column>
         </createTable>
 
-        <addAutoIncrement tableName="places" columnName="id" columnDataType="int" startWith="1" incrementBy="1"/>
+        <addAutoIncrement tableName="locations" columnName="id" columnDataType="int" startWith="1" incrementBy="1"/>
     </changeSet>
 
 </databaseChangeLog>

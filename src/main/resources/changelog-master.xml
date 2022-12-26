@@ -7,5 +7,6 @@
 
     <include file="db.changelog/01-create-locations-table.xml" relativeToChangelogFile="true"/>
     <include file="db.changelog/01-populate-locations-table.xml" relativeToChangelogFile="true"/>
+    <include file="db.changelog/10-create-drivers-locations-table.xml" relativeToChangelogFile="true"/>
 
 </databaseChangeLog>

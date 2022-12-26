@@ -6,6 +6,5 @@
                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
 
     <include file="01-create-place-table.xml" relativeToChangelogFile="true"/>
-    <include file="01-fill-place-table.xml" relativeToChangelogFile="true"/>
 
 </databaseChangeLog>

@@ -1,6 +1,6 @@
 package com.example.matcher.repository;
 
-import com.example.matcher.command.CreateLocationsCommand;
+import com.example.matcher.command.locations.CreateLocationsCommand;
 import com.example.matcher.persistence.LocationsEntity;
 import com.kenshoo.pl.entity.*;
 import org.springframework.stereotype.Component;

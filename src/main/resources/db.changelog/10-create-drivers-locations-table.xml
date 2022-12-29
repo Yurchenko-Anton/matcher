@@ -11,7 +11,9 @@
             <column name="id" type="int">
                 <constraints nullable="false" primaryKey="true"/>
             </column>
-            <column name="driver_id" type="int"/>
+            <column name="driver_id" type="int">
+                <constraints unique="true"/>
+            </column>
             <column name="place_id" type="int"/>
         </createTable>
 

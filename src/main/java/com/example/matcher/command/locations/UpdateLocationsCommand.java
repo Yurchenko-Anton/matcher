@@ -1,4 +1,4 @@
-package com.example.matcher.command;
+package com.example.matcher.command.locations;
 
 import com.example.matcher.persistence.LocationsEntity;
 import com.kenshoo.pl.entity.Identifier;

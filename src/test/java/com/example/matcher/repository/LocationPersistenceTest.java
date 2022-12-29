@@ -1,7 +1,7 @@
 package com.example.matcher.repository;
 
-import com.example.matcher.command.CreateLocationsCommand;
-import com.example.matcher.command.UpdateLocationsCommand;
+import com.example.matcher.command.locations.CreateLocationsCommand;
+import com.example.matcher.command.locations.UpdateLocationsCommand;
 import com.example.matcher.config.JsonAuditRecordPublisher;
 import com.example.matcher.persistence.LocationsEntity;
 import com.example.matcher.table.schema.Locations;
@@ -13,7 +13,6 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

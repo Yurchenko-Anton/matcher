@@ -21,6 +21,5 @@ public class JsonAuditRecordPublisher implements AuditRecordPublisher {
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
-        System.out.println(auditRecordsStr);
     }
 }

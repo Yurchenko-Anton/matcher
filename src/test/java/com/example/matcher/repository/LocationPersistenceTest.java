@@ -51,27 +51,23 @@ class LocationPersistenceTest {
 
     @Test
     void shouldUpdateData() {
-        var queryBeforeUpdate = plContext
+        final var queryBeforeUpdate = plContext
                 .select(LocationsEntity.ID)
                 .from(LocationsEntity.INSTANCE)
                 .where(LocationsEntity.STREET_NAME.eq(START_STREET_NAME))
                 .fetch();
 
-        AtomicInteger id = new AtomicInteger();
+        int id = queryBeforeUpdate.stream().findFirst().orElseThrow().get(LocationsEntity.ID);
 
-        queryBeforeUpdate.forEach(query -> {
-            id.set(query.get(LocationsEntity.ID));
-        });
-
-        var cmd = new UpdateLocationsCommand(id.get());
+        final var cmd = new UpdateLocationsCommand(id);
         cmd.set(LocationsEntity.STREET_NAME, UPDATE_STREET_NAME);
 
         locationPersistence.update(List.of(cmd));
 
-        var queryAfterUpdate = plContext
+        final var queryAfterUpdate = plContext
                 .select(LocationsEntity.STREET_NAME)
                 .from(LocationsEntity.INSTANCE)
-                .where(LocationsEntity.ID.eq(id.get()))
+                .where(LocationsEntity.ID.eq(id))
                 .fetch();
 
         queryAfterUpdate.forEach(query -> {

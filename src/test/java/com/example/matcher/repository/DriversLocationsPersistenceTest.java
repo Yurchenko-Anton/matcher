@@ -3,6 +3,7 @@ package com.example.matcher.repository;
 import com.example.matcher.command.drivers.locations.CreateDriversLocationsCommand;
 import com.example.matcher.command.drivers.locations.UpdateDriversLocationsCommand;
 import com.example.matcher.config.JsonAuditRecordPublisher;
+import com.example.matcher.config.TestPLConfig;
 import com.example.matcher.persistence.DriversLocationsEntity;
 import com.example.matcher.table.schema.DriversLocations;
 import com.kenshoo.pl.entity.PLContext;
@@ -17,17 +18,11 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class DriversLocationsPersistenceTest {
-
-    private static final String URL = "jdbc:mysql://localhost:3300/security";
-    private static final String USERNAME = "root";
-    private static final String PASSWORD = "root";
-
     private static final Integer PLACE_ID = 4;
     private static final Integer DRIVER_ID = 1;
 
-    private static final DSLContext dslContext = DSL.using(URL, USERNAME, PASSWORD);
-
-    private static final PLContext plContext = new PLContext.Builder(dslContext).withAuditRecordPublisher(new JsonAuditRecordPublisher()).build();
+    private static final TestPLConfig testPLConfig = new TestPLConfig();
+    private static final PLContext plContext = testPLConfig.configPL();
 
     private static final DriversLocationsPersistence driversLocationsPersistence = new DriversLocationsPersistence(plContext);
 

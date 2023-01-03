@@ -3,6 +3,7 @@ package com.example.matcher.repository;
 import com.example.matcher.command.locations.CreateLocationsCommand;
 import com.example.matcher.command.locations.UpdateLocationsCommand;
 import com.example.matcher.config.JsonAuditRecordPublisher;
+import com.example.matcher.config.TestPLConfig;
 import com.example.matcher.persistence.LocationsEntity;
 import com.example.matcher.table.schema.Locations;
 import com.kenshoo.pl.entity.PLContext;
@@ -17,17 +18,11 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class LocationPersistenceTest {
-
-    private static final String URL = "jdbc:mysql://localhost:3300/security";
-    private static final String USERNAME = "root";
-    private static final String PASSWORD = "root";
-
     private static final String START_STREET_NAME = "Test";
     private static final String UPDATE_STREET_NAME = "UpdateTest";
 
-    private static final DSLContext dslContext = DSL.using(URL, USERNAME, PASSWORD);
-
-    private static final PLContext plContext = new PLContext.Builder(dslContext).withAuditRecordPublisher(new JsonAuditRecordPublisher()).build();
+    private static final TestPLConfig testPLConfig = new TestPLConfig();
+    private static final PLContext plContext = testPLConfig.configPL();
 
     private static final LocationPersistence locationPersistence = new LocationPersistence(plContext);
 

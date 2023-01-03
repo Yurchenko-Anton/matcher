@@ -17,9 +17,6 @@ public class DistanceService {
         LocationsDTO startLocations = distanceRepository.getLocations(createOrderDTO.getStartPosition());
         LocationsDTO finishLocations = distanceRepository.getLocations(createOrderDTO.getFinishPosition());
 
-        double distance = calculateService.calculateDistance(startLocations, finishLocations);
-
-        return distance;
+        return calculateService.calculateDistance(startLocations, finishLocations);
     }
-
 }

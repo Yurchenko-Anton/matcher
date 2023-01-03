@@ -1,22 +1,18 @@
 package com.example.matcher.service;
 
-import com.example.matcher.config.TestPLConfig;
+import com.example.matcher.BaseTest;
 import com.example.matcher.dto.CreateOrderDTO;
 import com.example.matcher.repository.DistanceRepository;
-import com.kenshoo.pl.entity.PLContext;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class DistanceServiceTest {
+class DistanceServiceTest extends BaseTest {
 
-    private final String START_POSITION = "Kosmonavtov";
-    private final String FINISH_POSITION = "Junosty";
+    private static final String START_POSITION = "Kosmonavtov";
+    private static final String FINISH_POSITION = "Junosty";
 
-    private final TestPLConfig testPLConfig = new TestPLConfig();
-    private final PLContext plContext = testPLConfig.configPL();
-
-    private final DistanceRepository distanceRepository = new DistanceRepository(plContext);
+    private final DistanceRepository distanceRepository = new DistanceRepository(PL_CONTEXT);
 
     private final CalculateService calculateService = new CalculateService();
 

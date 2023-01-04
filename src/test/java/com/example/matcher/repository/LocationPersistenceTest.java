@@ -1,12 +1,10 @@
 package com.example.matcher.repository;
 
+import com.example.matcher.BaseTest;
 import com.example.matcher.command.locations.CreateLocationsCommand;
 import com.example.matcher.command.locations.UpdateLocationsCommand;
-import com.example.matcher.config.JsonAuditRecordPublisher;
 import com.example.matcher.persistence.LocationsEntity;
 import com.example.matcher.table.schema.Locations;
-import com.kenshoo.pl.entity.PLContext;
-import org.jooq.DSLContext;
 import org.jooq.impl.DSL;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -16,20 +14,12 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class LocationPersistenceTest {
-
-    private static final String URL = "jdbc:mysql://localhost:3300/security";
-    private static final String USERNAME = "root";
-    private static final String PASSWORD = "root";
+class LocationPersistenceTest extends BaseTest {
 
     private static final String START_STREET_NAME = "Test";
     private static final String UPDATE_STREET_NAME = "UpdateTest";
 
-    private static final DSLContext dslContext = DSL.using(URL, USERNAME, PASSWORD);
-
-    private static final PLContext plContext = new PLContext.Builder(dslContext).withAuditRecordPublisher(new JsonAuditRecordPublisher()).build();
-
-    private static final LocationPersistence locationPersistence = new LocationPersistence(plContext);
+    private static final LocationPersistence locationPersistence = new LocationPersistence(PL_CONTEXT);
 
     @BeforeAll
     static void createTestData() {
@@ -42,7 +32,7 @@ class LocationPersistenceTest {
 
     @AfterAll
     static void deleteTestData() {
-        plContext.dslContext()
+        PL_CONTEXT.dslContext()
                 .delete(Locations.TABLE)
                 .where(DSL.field(LocationsEntity.STREET_NAME.toString()).eq(UPDATE_STREET_NAME))
                 .execute();
@@ -50,7 +40,7 @@ class LocationPersistenceTest {
 
     @Test
     void shouldUpdateData() {
-        final var queryBeforeUpdate = plContext
+        final var queryBeforeUpdate = PL_CONTEXT
                 .select(LocationsEntity.ID)
                 .from(LocationsEntity.INSTANCE)
                 .where(LocationsEntity.STREET_NAME.eq(START_STREET_NAME))
@@ -63,7 +53,7 @@ class LocationPersistenceTest {
 
         locationPersistence.update(List.of(cmd));
 
-        final var queryAfterUpdate = plContext
+        final var queryAfterUpdate = PL_CONTEXT
                 .select(LocationsEntity.STREET_NAME)
                 .from(LocationsEntity.INSTANCE)
                 .where(LocationsEntity.ID.eq(id))

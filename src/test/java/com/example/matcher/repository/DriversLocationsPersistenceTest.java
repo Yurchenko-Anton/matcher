@@ -1,12 +1,10 @@
 package com.example.matcher.repository;
 
+import com.example.matcher.BaseTest;
 import com.example.matcher.command.drivers.locations.CreateDriversLocationsCommand;
 import com.example.matcher.command.drivers.locations.UpdateDriversLocationsCommand;
-import com.example.matcher.config.JsonAuditRecordPublisher;
 import com.example.matcher.persistence.DriversLocationsEntity;
 import com.example.matcher.table.schema.DriversLocations;
-import com.kenshoo.pl.entity.PLContext;
-import org.jooq.DSLContext;
 import org.jooq.impl.DSL;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -16,20 +14,12 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class DriversLocationsPersistenceTest {
-
-    private static final String URL = "jdbc:mysql://localhost:3300/security";
-    private static final String USERNAME = "root";
-    private static final String PASSWORD = "root";
+class DriversLocationsPersistenceTest extends BaseTest {
 
     private static final Integer PLACE_ID = 4;
     private static final Integer DRIVER_ID = 1;
 
-    private static final DSLContext dslContext = DSL.using(URL, USERNAME, PASSWORD);
-
-    private static final PLContext plContext = new PLContext.Builder(dslContext).withAuditRecordPublisher(new JsonAuditRecordPublisher()).build();
-
-    private static final DriversLocationsPersistence driversLocationsPersistence = new DriversLocationsPersistence(plContext);
+    private static final DriversLocationsPersistence driversLocationsPersistence = new DriversLocationsPersistence(PL_CONTEXT);
 
     @BeforeAll
     static void createTestData() {
@@ -40,7 +30,7 @@ class DriversLocationsPersistenceTest {
 
     @AfterAll
     static void deleteTestData() {
-        plContext.dslContext()
+        PL_CONTEXT.dslContext()
                 .delete(DriversLocations.TABLE)
                 .where(DSL.field(DriversLocationsEntity.ID.toString()).eq(DRIVER_ID))
                 .execute();
@@ -48,7 +38,7 @@ class DriversLocationsPersistenceTest {
 
     @Test
     void shouldUpdateData() {
-        final var queryBeforeUpdate = plContext
+        final var queryBeforeUpdate = PL_CONTEXT
                 .select(DriversLocationsEntity.ID)
                 .from(DriversLocationsEntity.INSTANCE)
                 .where(DriversLocationsEntity.DRIVER_ID.eq(DRIVER_ID))
@@ -61,7 +51,7 @@ class DriversLocationsPersistenceTest {
 
         driversLocationsPersistence.update(List.of(cmd));
 
-        final var queryAfterUpdate = plContext
+        final var queryAfterUpdate = PL_CONTEXT
                 .select(DriversLocationsEntity.PLACE_ID)
                 .from(DriversLocationsEntity.INSTANCE)
                 .where(DriversLocationsEntity.ID.eq(id))

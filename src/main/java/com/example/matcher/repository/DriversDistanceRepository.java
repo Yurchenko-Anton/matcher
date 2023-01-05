@@ -10,13 +10,11 @@ import com.kenshoo.pl.entity.PLContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.TreeMap;
 
 @Component
 @RequiredArgsConstructor
-public class DistanceDriverRepository {
+public class DriversDistanceRepository {
 
     private static final int RANGE = 1000;
 
@@ -32,20 +30,6 @@ public class DistanceDriverRepository {
         return locations.getId();
     }
 
-    public Integer getNearestDriver(TreeMap<Double, LocationsDTO> distanceLocations) {
-        distanceLocations.values().forEach(System.out::println);
-        List<Integer> id = new ArrayList<>();
-
-        for (LocationsDTO locations : distanceLocations.values()) {
-            id.addAll(getDriverId(locations));
-            if (!id.isEmpty()) {
-                break;
-            }
-        }
-
-        return id.stream().findFirst().orElseThrow();
-    }
-
     public List<LocationsDTO> getLocationsNearClient(int clientXCoordinate, int clientYCoordinate) {
         return plContext
                 .dslContext()
@@ -57,7 +41,7 @@ public class DistanceDriverRepository {
                 .fetchInto(LocationsDTO.class);
     }
 
-    private List<Integer> getDriverId(LocationsDTO locations) {
+    public List<Integer> getDriverId(LocationsDTO locations) {
         return plContext.dslContext()
                 .select(DriversLocations.TABLE.driverId)
                 .from(DriversLocations.TABLE)

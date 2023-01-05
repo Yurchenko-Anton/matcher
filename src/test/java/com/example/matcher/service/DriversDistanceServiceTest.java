@@ -3,7 +3,7 @@ package com.example.matcher.service;
 import com.example.matcher.BaseTest;
 import com.example.matcher.dto.DriversLocationsDTO;
 import com.example.matcher.persistence.DriversLocationsEntity;
-import com.example.matcher.repository.DistanceDriverRepository;
+import com.example.matcher.repository.DriversDistanceRepository;
 import com.example.matcher.repository.DistanceRepository;
 import com.example.matcher.repository.DriversLocationsPersistence;
 import com.example.matcher.table.schema.DriversLocations;
@@ -21,8 +21,8 @@ class DriversDistanceServiceTest extends BaseTest {
     private final CalculateService calculateService = new CalculateService();
     private final DistanceRepository distanceRepository = new DistanceRepository(PL_CONTEXT);
     private final DriversLocationsPersistence driversLocationsPersistence = new DriversLocationsPersistence(PL_CONTEXT);
-    private final DistanceDriverRepository distanceDriverRepository = new DistanceDriverRepository(PL_CONTEXT,driversLocationsPersistence);
-    private final DriversDistanceService driversDistanceService = new DriversDistanceService(distanceDriverRepository, distanceRepository, calculateService);
+    private final DriversDistanceRepository driversDistanceRepository = new DriversDistanceRepository(PL_CONTEXT,driversLocationsPersistence);
+    private final DriversDistanceService driversDistanceService = new DriversDistanceService(driversDistanceRepository, distanceRepository, calculateService);
 
     @AfterAll
     static void deleteTestData() {

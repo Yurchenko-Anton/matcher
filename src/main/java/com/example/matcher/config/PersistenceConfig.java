@@ -8,12 +8,12 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @RequiredArgsConstructor
-public class DriversLocationsConfig {
+public class PersistenceConfig {
 
     private final PLContext plContext;
 
     @Bean
-    public DriversLocationsPersistence init(){
+    public DriversLocationsPersistence driversLocationsPersistence(){
         return new DriversLocationsPersistence(plContext);
     }
 }

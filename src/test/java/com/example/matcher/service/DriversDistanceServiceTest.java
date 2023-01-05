@@ -6,7 +6,6 @@ import com.example.matcher.persistence.DriversLocationsEntity;
 import com.example.matcher.repository.DistanceDriverRepository;
 import com.example.matcher.repository.DriversLocationsPersistence;
 import com.example.matcher.table.schema.DriversLocations;
-import com.kenshoo.pl.entity.PLContext;
 import org.jooq.impl.DSL;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;

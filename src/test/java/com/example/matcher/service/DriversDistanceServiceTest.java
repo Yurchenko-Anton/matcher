@@ -4,6 +4,7 @@ import com.example.matcher.BaseTest;
 import com.example.matcher.dto.DriversLocationsDTO;
 import com.example.matcher.persistence.DriversLocationsEntity;
 import com.example.matcher.repository.DistanceDriverRepository;
+import com.example.matcher.repository.DistanceRepository;
 import com.example.matcher.repository.DriversLocationsPersistence;
 import com.example.matcher.table.schema.DriversLocations;
 import org.jooq.impl.DSL;
@@ -17,8 +18,11 @@ class DriversDistanceServiceTest extends BaseTest {
     private static final int DRIVER_ID = 3;
     private static final String STREET_NAME = "Junosty";
 
+    private final CalculateService calculateService = new CalculateService();
+    private final DistanceRepository distanceRepository = new DistanceRepository(PL_CONTEXT);
     private final DriversLocationsPersistence driversLocationsPersistence = new DriversLocationsPersistence(PL_CONTEXT);
     private final DistanceDriverRepository distanceDriverRepository = new DistanceDriverRepository(PL_CONTEXT,driversLocationsPersistence);
+    private final DriversDistanceService driversDistanceService = new DriversDistanceService(distanceDriverRepository, distanceRepository, calculateService);
 
     @AfterAll
     static void deleteTestData() {
@@ -29,9 +33,14 @@ class DriversDistanceServiceTest extends BaseTest {
     }
 
     @Test
-    void setLocations() {
+    void shouldSetLocations() {
         DriversLocationsDTO driversLocationsDTO = new DriversLocationsDTO(DRIVER_ID, STREET_NAME);
 
-        assertEquals(3,distanceDriverRepository.setLocations(driversLocationsDTO));
+        assertEquals(3,driversDistanceService.setLocations(driversLocationsDTO));
+    }
+
+    @Test
+    void shouldGetNearestDriver(){
+        assertEquals(3, driversDistanceService.getNearestDriver(STREET_NAME));
     }
 }

@@ -16,4 +16,9 @@ public class DriversDistance {
     public int setLocations(@RequestBody DriversLocationsDTO driversLocationsDTO){
         return driversDistanceService.setLocations(driversLocationsDTO);
     }
+
+    @GetMapping("/{clientPosition}")
+    public Integer getNearestDriver(@PathVariable String clientPosition){
+        return driversDistanceService.getNearestDriver(clientPosition);
+    }
 }

@@ -15,10 +15,9 @@ import java.util.List;
 public class DistanceDriverRepository {
 
     private final PLContext plContext;
+    private final DriversLocationsPersistence driversLocationsPersistence;
 
     public int setLocations(DriversLocationsDTO driversLocationsDTO) {
-        DriversLocationsPersistence driversLocationsPersistence = new DriversLocationsPersistence(plContext);
-
         int locationsId = getLocationsId(driversLocationsDTO.getStreetName());
 
         final var cmd = new CreateDriversLocationsCommand();

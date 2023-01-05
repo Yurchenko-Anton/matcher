@@ -6,5 +6,4 @@ import lombok.Value;
 public class CreateOrderDTO {
     String startPosition;
     String finishPosition;
-    Long guestId;
 }

@@ -20,7 +20,7 @@ class DistanceServiceTest extends BaseTest {
 
     @Test
     void getDistance() {
-        CreateOrderDTO createOrderDTO = new CreateOrderDTO(START_POSITION, FINISH_POSITION, null);
+        CreateOrderDTO createOrderDTO = new CreateOrderDTO(START_POSITION, FINISH_POSITION);
 
         assertEquals(820.1, distanceService.getDistance(createOrderDTO));
     }

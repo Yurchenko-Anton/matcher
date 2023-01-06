@@ -27,5 +27,5 @@ public class DriversLocationsEntity extends AbstractEntityType<DriversLocationsE
 
     public static final EntityField<DriversLocationsEntity, Integer> DRIVER_ID = INSTANCE.field(DriversLocations.TABLE.driverId);
 
-    public static final EntityField<DriversLocationsEntity, Integer> PLACE_ID = INSTANCE.field(DriversLocations.TABLE.placeId);
+    public static final EntityField<DriversLocationsEntity, Integer> LOCATIONS_ID = INSTANCE.field(DriversLocations.TABLE.locationsId);
 }

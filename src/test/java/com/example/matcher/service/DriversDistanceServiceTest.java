@@ -41,6 +41,6 @@ class DriversDistanceServiceTest extends BaseTest {
 
     @Test
     void shouldGetNearestDriver(){
-        assertEquals(3, driversDistanceService.getNearestDriver(STREET_NAME));
+        assertEquals(3, driversDistanceService.getNearestDriverToClient(STREET_NAME));
     }
 }

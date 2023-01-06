@@ -8,6 +8,7 @@ import com.example.matcher.table.schema.DriversLocations;
 import com.example.matcher.table.schema.Locations;
 import com.kenshoo.pl.entity.PLContext;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -16,7 +17,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class DriversDistanceRepository {
 
-    private static final int RANGE = 1000;
+    @Value("${distance.range}")
+    private int range;
 
     private final PLContext plContext;
     private final DriversLocationsPersistence driversLocationsPersistence;
@@ -24,20 +26,20 @@ public class DriversDistanceRepository {
     public int setLocations(LocationsDTO locations, DriversLocationsDTO driversLocationsDTO) {
         final var cmd = new CreateDriversLocationsCommand();
         cmd.set(DriversLocationsEntity.DRIVER_ID, driversLocationsDTO.getId());
-        cmd.set(DriversLocationsEntity.PLACE_ID, locations.getId());
+        cmd.set(DriversLocationsEntity.LOCATIONS_ID, locations.getId());
         driversLocationsPersistence.create(List.of(cmd));
 
         return locations.getId();
     }
 
-    public List<LocationsDTO> getLocationsNearClient(int clientXCoordinate, int clientYCoordinate) {
+    public List<LocationsDTO> getLocationsNearClient(LocationsDTO locations) {
         return plContext
                 .dslContext()
                 .selectFrom(Locations.TABLE)
                 .where(Locations.TABLE.xCoordinate
-                        .between(clientXCoordinate - RANGE, clientXCoordinate + RANGE))
+                        .between(locations.getXCoordinate() - range, locations.getXCoordinate() + range))
                 .and(Locations.TABLE.yCoordinate
-                        .between(clientYCoordinate - RANGE, clientYCoordinate + RANGE))
+                        .between(locations.getYCoordinate() - range, locations.getYCoordinate() + range))
                 .fetchInto(LocationsDTO.class);
     }
 
@@ -45,7 +47,7 @@ public class DriversDistanceRepository {
         return plContext.dslContext()
                 .select(DriversLocations.TABLE.driverId)
                 .from(DriversLocations.TABLE)
-                .where(DriversLocations.TABLE.placeId.eq(locations.getId()))
+                .where(DriversLocations.TABLE.locationsId.eq(locations.getId()))
                 .fetchInto(Integer.class);
     }
 }

@@ -2,14 +2,15 @@ package com.example.matcher.service;
 
 import com.example.matcher.dto.DriversLocationsDTO;
 import com.example.matcher.dto.LocationsDTO;
-import com.example.matcher.repository.DriversDistanceRepository;
 import com.example.matcher.repository.DistanceRepository;
+import com.example.matcher.repository.DriversDistanceRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.TreeMap;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -21,33 +22,35 @@ public class DriversDistanceService {
 
     public int setLocations(DriversLocationsDTO driversLocationsDTO) {
         LocationsDTO locations = distanceRepository.getLocations(driversLocationsDTO.getStreetName());
-        return driversDistanceRepository.setLocations(locations,driversLocationsDTO);
+        return driversDistanceRepository.setLocations(locations, driversLocationsDTO);
     }
 
-    public Integer getNearestDriver(String clientLocations) {
-        LocationsDTO clientLocation = distanceRepository.getLocations(clientLocations);
-        List<LocationsDTO> locations = driversDistanceRepository.getLocationsNearClient(clientLocation.getXCoordinate(), clientLocation.getYCoordinate());
-        TreeMap<Double, LocationsDTO> distanceLocations = countDistanceDriverClient(locations, clientLocation);
+    public Integer getNearestDriverToClient(String clientStreetName) {
+        LocationsDTO clientLocation = distanceRepository.getLocations(clientStreetName);
+        List<LocationsDTO> locationsNearClient = driversDistanceRepository.getLocationsNearClient(clientLocation);
 
-        List<Integer> id = new ArrayList<>();
+        Map<LocationsDTO, Double> locationWithDistance = getLocationWithDistance(locationsNearClient, clientLocation);
+        LocationsDTO nearestLocation = getNearestLocationWithDrivers(locationWithDistance);
 
-        for (LocationsDTO location : distanceLocations.values()) {
-            id.addAll(driversDistanceRepository.getDriverId(location));
-            if (!id.isEmpty()) {
-                break;
-            }
-        }
-
-        return id.stream().findFirst().orElseThrow();
+        return driversDistanceRepository.getDriverId(nearestLocation).stream().findFirst().orElseThrow();
     }
 
-    private TreeMap<Double, LocationsDTO> countDistanceDriverClient(List<LocationsDTO> locationsDTOS, LocationsDTO clientLocations){
-        TreeMap<Double, LocationsDTO> distanceLocations = new TreeMap<>();
+    private Map<LocationsDTO, Double> getLocationWithDistance(List<LocationsDTO> locationsNearClient, LocationsDTO clientLocation) {
+        return locationsNearClient.stream()
+                .filter(locations -> !driversDistanceRepository.getDriverId(locations).isEmpty())
+                .map(locations -> {
+                    Double distance = calculateService.calculateDistance(locations, clientLocation);
 
-        for (LocationsDTO locations : locationsDTOS){
-            distanceLocations.put(calculateService.calculateDistance(locations, clientLocations),locations);
-        }
+                    return new HashMap<LocationsDTO, Double>() {{
+                        put(locations, distance);
+                    }};
+                })
+                .flatMap(map -> map.entrySet().stream())
+                .collect(Collectors.groupingBy(Map.Entry::getKey, Collectors.summingDouble(Map.Entry::getValue)));
+    }
 
-        return distanceLocations;
+    private LocationsDTO getNearestLocationWithDrivers(Map<LocationsDTO, Double> locationsWithDistance) {
+        return locationsWithDistance.entrySet().stream()
+                .min(Map.Entry.comparingByValue()).orElseThrow(NullPointerException::new).getKey();
     }
 }

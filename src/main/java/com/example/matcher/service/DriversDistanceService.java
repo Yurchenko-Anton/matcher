@@ -29,13 +29,12 @@ public class DriversDistanceService {
         LocationsDTO clientLocation = distanceRepository.getLocations(clientStreetName);
         List<LocationsDTO> locationsNearClient = driversDistanceRepository.getLocationsNearClient(clientLocation);
 
-        Map<LocationsDTO, Double> locationWithDistance = getLocationWithDistance(locationsNearClient, clientLocation);
-        LocationsDTO nearestLocation = getNearestLocationWithDrivers(locationWithDistance);
+        LocationsDTO nearestLocation = getNearestLocationWithDrivers(locationsNearClient, clientLocation);
 
         return driversDistanceRepository.getDriverId(nearestLocation).stream().findFirst().orElseThrow();
     }
 
-    private Map<LocationsDTO, Double> getLocationWithDistance(List<LocationsDTO> locationsNearClient, LocationsDTO clientLocation) {
+    private LocationsDTO getNearestLocationWithDrivers(List<LocationsDTO> locationsNearClient, LocationsDTO clientLocation) {
         return locationsNearClient.stream()
                 .filter(locations -> !driversDistanceRepository.getDriverId(locations).isEmpty())
                 .map(locations -> {
@@ -46,11 +45,8 @@ public class DriversDistanceService {
                     }};
                 })
                 .flatMap(map -> map.entrySet().stream())
-                .collect(Collectors.groupingBy(Map.Entry::getKey, Collectors.summingDouble(Map.Entry::getValue)));
-    }
-
-    private LocationsDTO getNearestLocationWithDrivers(Map<LocationsDTO, Double> locationsWithDistance) {
-        return locationsWithDistance.entrySet().stream()
+                .collect(Collectors.groupingBy(Map.Entry::getKey, Collectors.summingDouble(Map.Entry::getValue)))
+                .entrySet().stream()
                 .min(Map.Entry.comparingByValue()).orElseThrow(NullPointerException::new).getKey();
     }
 }

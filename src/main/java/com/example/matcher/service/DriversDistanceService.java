@@ -5,6 +5,7 @@ import com.example.matcher.dto.LocationsDTO;
 import com.example.matcher.repository.DistanceRepository;
 import com.example.matcher.repository.DriversDistanceRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -25,16 +26,14 @@ public class DriversDistanceService {
         return driversDistanceRepository.setLocations(locations, driversLocationsDTO);
     }
 
-    public Integer getNearestDriverToClient(String clientStreetName) {
+    public ResponseEntity<Integer> getNearestDriverIdToClient(String clientStreetName) {
         LocationsDTO clientLocation = distanceRepository.getLocations(clientStreetName);
         List<LocationsDTO> locationsNearClient = driversDistanceRepository.getLocationsNearClient(clientLocation);
 
-        LocationsDTO nearestLocation = getNearestLocationWithDrivers(locationsNearClient, clientLocation);
-
-        return driversDistanceRepository.getDriverId(nearestLocation).stream().findFirst().orElseThrow();
+        return getNearestDriverId(locationsNearClient, clientLocation);
     }
 
-    private LocationsDTO getNearestLocationWithDrivers(List<LocationsDTO> locationsNearClient, LocationsDTO clientLocation) {
+    private ResponseEntity<Integer> getNearestDriverId(List<LocationsDTO> locationsNearClient, LocationsDTO clientLocation) {
         return locationsNearClient.stream()
                 .filter(locations -> !driversDistanceRepository.getDriverId(locations).isEmpty())
                 .map(locations -> {
@@ -47,6 +46,10 @@ public class DriversDistanceService {
                 .flatMap(map -> map.entrySet().stream())
                 .collect(Collectors.groupingBy(Map.Entry::getKey, Collectors.summingDouble(Map.Entry::getValue)))
                 .entrySet().stream()
-                .min(Map.Entry.comparingByValue()).orElseThrow(NullPointerException::new).getKey();
+                .min(Map.Entry.comparingByValue())
+                .map(entry -> {
+                    return driversDistanceRepository.getDriverId(entry.getKey()).stream().findFirst().orElseThrow(() -> new RuntimeException("Driver not found"));
+                })
+                .map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 }

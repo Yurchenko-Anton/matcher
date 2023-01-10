@@ -3,13 +3,14 @@ package com.example.matcher.service;
 import com.example.matcher.BaseTest;
 import com.example.matcher.dto.DriversLocationsDTO;
 import com.example.matcher.persistence.DriversLocationsEntity;
-import com.example.matcher.repository.DriversDistanceRepository;
 import com.example.matcher.repository.DistanceRepository;
+import com.example.matcher.repository.DriversDistanceRepository;
 import com.example.matcher.repository.DriversLocationsPersistence;
 import com.example.matcher.table.schema.DriversLocations;
 import org.jooq.impl.DSL;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
+import org.springframework.http.ResponseEntity;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -20,8 +21,8 @@ class DriversDistanceServiceTest extends BaseTest {
 
     private final CalculateService calculateService = new CalculateService();
     private final DistanceRepository distanceRepository = new DistanceRepository(PL_CONTEXT);
-    private final DriversLocationsPersistence driversLocationsPersistence = new DriversLocationsPersistence(PL_CONTEXT);
-    private final DriversDistanceRepository driversDistanceRepository = new DriversDistanceRepository(PL_CONTEXT,driversLocationsPersistence);
+    private static final DriversLocationsPersistence driversLocationsPersistence = new DriversLocationsPersistence(PL_CONTEXT);
+    private final DriversDistanceRepository driversDistanceRepository = new DriversDistanceRepository(PL_CONTEXT, driversLocationsPersistence);
     private final DriversDistanceService driversDistanceService = new DriversDistanceService(driversDistanceRepository, distanceRepository, calculateService);
 
     @AfterAll
@@ -36,11 +37,11 @@ class DriversDistanceServiceTest extends BaseTest {
     void shouldSetLocations() {
         DriversLocationsDTO driversLocationsDTO = new DriversLocationsDTO(DRIVER_ID, STREET_NAME);
 
-        assertEquals(3,driversDistanceService.setLocations(driversLocationsDTO));
+        assertEquals(3, driversDistanceService.setLocations(driversLocationsDTO));
     }
 
     @Test
-    void shouldGetNearestDriver(){
-        assertEquals(3, driversDistanceService.getNearestDriverToClient(STREET_NAME));
+    void shouldGetNearestDriverId() {
+        assertEquals(ResponseEntity.ok(3), driversDistanceService.getNearestDriverIdToClient(STREET_NAME));
     }
 }

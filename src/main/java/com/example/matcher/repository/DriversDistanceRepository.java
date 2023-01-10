@@ -59,7 +59,7 @@ public class DriversDistanceRepository {
     }
 
     public Boolean setStatus(DriversStatusDTO driversStatusDTO){
-        int driversLocationsId = getDriversLocationsIdByDriverId(driversStatusDTO);
+        int driversLocationsId = getDriversLocationsIdByDriverId(driversStatusDTO.getId());
         Status status = Status.valueOf(driversStatusDTO.getStatus().toUpperCase());
 
         final var cmd = new UpdateDriversLocationsCommand(driversLocationsId);
@@ -78,12 +78,14 @@ public class DriversDistanceRepository {
         return status.isEmpty() ? Status.FREE : status.stream().findFirst().get();
     }
 
-    private Integer getDriversLocationsIdByDriverId(DriversStatusDTO driversStatusDTO){
+    private Integer getDriversLocationsIdByDriverId(Integer driverId){
         return plContext.dslContext()
                 .select(DriversLocations.TABLE.id)
                 .from(DriversLocations.TABLE)
-                .where(DriversLocations.TABLE.driverId.eq(driversStatusDTO.getId()))
+                .where(DriversLocations.TABLE.driverId.eq(driverId))
                 .fetchInto(Integer.class)
-                .stream().findFirst().orElseThrow(() -> new RuntimeException("Wrong driver id"));
+                .stream()
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("Can`t find driver locations, for driver id: " + driverId));
     }
 }

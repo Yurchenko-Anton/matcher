@@ -50,6 +50,7 @@ public class DriversDistanceService {
                 .map(entry -> {
                     return driversDistanceRepository.getDriverId(entry.getKey()).stream().findFirst().orElseThrow(() -> new RuntimeException("LocationsDTO object is wrong"));
                 })
-                .map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 }

@@ -2,6 +2,8 @@ package com.example.matcher.service;
 
 import com.example.matcher.BaseTest;
 import com.example.matcher.dto.DriversLocationsDTO;
+import com.example.matcher.dto.DriversStatusDTO;
+import com.example.matcher.model.Status;
 import com.example.matcher.persistence.DriversLocationsEntity;
 import com.example.matcher.repository.DistanceRepository;
 import com.example.matcher.repository.DriversDistanceRepository;
@@ -18,6 +20,7 @@ class DriversDistanceServiceTest extends BaseTest {
 
     private static final int DRIVER_ID = 3;
     private static final String STREET_NAME = "Junosty";
+    private static final Status STATUS = Status.BUSY;
 
     private final CalculateService calculateService = new CalculateService();
     private final DistanceRepository distanceRepository = new DistanceRepository(PL_CONTEXT);
@@ -43,5 +46,12 @@ class DriversDistanceServiceTest extends BaseTest {
     @Test
     void shouldGetNearestDriverId() {
         assertEquals(ResponseEntity.ok(3), driversDistanceService.getNearestDriverIdToClient(STREET_NAME));
+    }
+
+    @Test
+    void shouldSetStatus(){
+        DriversStatusDTO driversStatusDTO = new DriversStatusDTO(DRIVER_ID, STATUS.name());
+
+        assertEquals(ResponseEntity.ok(STATUS.name()), driversDistanceService.setStatus(driversStatusDTO));
     }
 }

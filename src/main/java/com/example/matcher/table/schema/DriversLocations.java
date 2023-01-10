@@ -23,4 +23,6 @@ public class DriversLocations extends AbstractDataTable<DriversLocations> {
     public final TableField<Record, Integer> driverId = createFKField("driver_id", Users.TABLE.id);
 
     public final TableField<Record, Integer> locationsId = createFKField("place_id", Locations.TABLE.id);
+
+    public final TableField<Record, String> status = createField("status", SQLDataType.VARCHAR.length(255));
 }

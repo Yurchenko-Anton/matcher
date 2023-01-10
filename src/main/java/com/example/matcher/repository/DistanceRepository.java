@@ -12,11 +12,11 @@ public class DistanceRepository {
 
     private final PLContext plContext;
 
-    public LocationsDTO getLocations(String locations) {
+    public LocationsDTO getLocations(String streetName) {
         final var request = plContext
                 .select(LocationsEntity.ID, LocationsEntity.STREET_NAME, LocationsEntity.X_COORDINATE, LocationsEntity.Y_COORDINATE)
                 .from(LocationsEntity.INSTANCE)
-                .where(LocationsEntity.STREET_NAME.eq(locations))
+                .where(LocationsEntity.STREET_NAME.eq(streetName))
                 .fetch();
         return LocationsDTO.builder()
                 .id(request.stream().findFirst().orElseThrow().get(LocationsEntity.ID))

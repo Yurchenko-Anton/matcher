@@ -47,18 +47,18 @@ class DriversLocationsPersistenceTest extends BaseTest {
         int id = queryBeforeUpdate.stream().findFirst().orElseThrow().get(DriversLocationsEntity.ID);
 
         final var cmd = new UpdateDriversLocationsCommand(id);
-        cmd.set(DriversLocationsEntity.PLACE_ID, PLACE_ID);
+        cmd.set(DriversLocationsEntity.LOCATIONS_ID, PLACE_ID);
 
         driversLocationsPersistence.update(List.of(cmd));
 
         final var queryAfterUpdate = PL_CONTEXT
-                .select(DriversLocationsEntity.PLACE_ID)
+                .select(DriversLocationsEntity.LOCATIONS_ID)
                 .from(DriversLocationsEntity.INSTANCE)
                 .where(DriversLocationsEntity.ID.eq(id))
                 .fetch();
 
         queryAfterUpdate.forEach(query -> {
-            final var resultPlaceId = query.get(DriversLocationsEntity.PLACE_ID);
+            final var resultPlaceId = query.get(DriversLocationsEntity.LOCATIONS_ID);
 
             assertEquals(PLACE_ID, resultPlaceId);
         });

@@ -48,7 +48,7 @@ public class DriversDistanceService {
                 .entrySet().stream()
                 .min(Map.Entry.comparingByValue())
                 .map(entry -> {
-                    return driversDistanceRepository.getDriverId(entry.getKey()).stream().findFirst().orElseThrow(() -> new RuntimeException("Driver not found"));
+                    return driversDistanceRepository.getDriverId(entry.getKey()).stream().findFirst().orElseThrow(() -> new RuntimeException("LocationsDTO object is wrong"));
                 })
                 .map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }

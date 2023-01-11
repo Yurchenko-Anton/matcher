@@ -1,6 +1,7 @@
 package com.example.matcher.service;
 
 import com.example.matcher.dto.DriversLocationsDTO;
+import com.example.matcher.dto.DriversStatusDTO;
 import com.example.matcher.dto.LocationsDTO;
 import com.example.matcher.repository.DistanceRepository;
 import com.example.matcher.repository.DriversDistanceRepository;
@@ -31,6 +32,12 @@ public class DriversDistanceService {
         List<LocationsDTO> locationsNearClient = driversDistanceRepository.getLocationsNearClient(clientLocation);
 
         return getNearestDriverId(locationsNearClient, clientLocation);
+    }
+
+    public ResponseEntity<String> setStatus(DriversStatusDTO driversStatusDTO){
+        return driversDistanceRepository.setStatus(driversStatusDTO)
+                ? ResponseEntity.badRequest().build()
+                : ResponseEntity.ok(driversStatusDTO.getStatus());
     }
 
     private ResponseEntity<Integer> getNearestDriverId(List<LocationsDTO> locationsNearClient, LocationsDTO clientLocation) {

@@ -1,6 +1,7 @@
 package com.example.matcher.web;
 
 import com.example.matcher.dto.DriversLocationsDTO;
+import com.example.matcher.dto.DriversStatusDTO;
 import com.example.matcher.service.DriversDistanceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -21,5 +22,10 @@ public class DriversDistance {
     @GetMapping("/{clientStreetName}")
     public ResponseEntity<Integer> getNearestDriverIdToClient(@PathVariable String clientStreetName) {
         return driversDistanceService.getNearestDriverIdToClient(clientStreetName);
+    }
+
+    @PostMapping("/status")
+    public ResponseEntity<String> setStatus(@RequestBody DriversStatusDTO driversStatusDTO){
+        return driversDistanceService.setStatus(driversStatusDTO);
     }
 }
